@@ -1,6 +1,5 @@
 #Requires AutoHotkey v2.0
 Persistent
-#Include <XZ\RunCmd>
 
 ^c:: ExitApp()
 ;==========TipText========
@@ -31,7 +30,11 @@ PrintError(text) {
     stdout.Read(0) ; 清除写入缓冲区.
     stdin.ReadLine()
 }
-
+RunWaitOne(command) {
+    shell := ComObject("WScript.Shell")
+    exec := shell.Exec(A_ComSpec " /C " command)
+    return exec.StdOut.ReadAll()
+}
 ADB := EnvGet("USERPROFILE") "\AppData\Local\Android\Sdk\platform-tools\adb.exe"
 if not FileExist(ADB) {
     if WhereADB := RunWaitOne("where adb") {
